@@ -7,10 +7,10 @@ import (
 
 // Message struct to respond with
 type Message struct {
-	Data []float32 `json:"data"`
+	Points []float32 `json:"points"`
 }
 
-func getCurve(length int) []float32 {
+func getRandomPoints(length int) []float32 {
 	points := make([]float32, length)
 	for i := 0; i < length; i++ {
 		points[i] = rand.Float32()
@@ -21,11 +21,11 @@ func getCurve(length int) []float32 {
 func main() {
 	m := macaron.Classic()
 	m.Use(macaron.Renderer())
-	m.Get("/", func() string {
-		return "Hello world!"
+	m.Get("/", func(ctx *macaron.Context) {
+        ctx.HTML(200, "index")
 	})
 	m.Get("/data", func(ctx *macaron.Context) {
-		msg := Message{getCurve(10)}
+		msg := Message{getRandomPoints(10)}
 		ctx.JSON(200, &msg)
 	})
 	m.Run()
