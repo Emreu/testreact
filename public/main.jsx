@@ -9,7 +9,6 @@ var GraphViewer = React.createClass({
     },
     reload: function() {
         $.getJSON( this.props.dataurl, (function(data){
-            console.log(data.points)
             this.setState({points: data.points})
         }).bind(this))
         
@@ -30,12 +29,9 @@ var GraphViewer = React.createClass({
 })
 
 function GraphLine(props) {
-    console.log(props)
-    var d = ""
-    props.points.forEach(function(point, index) {
-        d += (index === 0) ? "M" : "L"
-        d += props.step*index + "," + (props.shift + props.scale*point)
-    });
+    var d = props.points.map(function(point, index) {
+        return ((index === 0) ? "M" : "L") + props.step*index + "," + (props.shift + props.scale*point)
+    }).join(" ")
     return (
         <path d={d} stroke="black" strokeWidth="2" fill="none"/>
     )
